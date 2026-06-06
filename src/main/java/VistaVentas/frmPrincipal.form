@@ -26,8 +26,8 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
               <Component id="btnModuloVentas" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="84" max="32767" attributes="0"/>
-              <Component id="btnVentas" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="120" max="32767" attributes="0"/>
+              <Component id="btnClientes" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
@@ -43,7 +43,7 @@
               <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnModuloVentas" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnVentas" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnClientes" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace pref="199" max="32767" attributes="0"/>
               <Component id="btnRegresar" min="-2" max="-2" attributes="0"/>
@@ -61,12 +61,12 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnModuloVentasActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnVentas">
+    <Component class="javax.swing.JButton" name="btnClientes">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Abrir Ventanas"/>
+        <Property name="text" type="java.lang.String" value="Clientes"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVentasActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClientesActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnRegresar">

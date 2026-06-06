@@ -14,7 +14,6 @@ public class ConexionMySql {
     String driver = "com.mysql.cj.jdbc.Driver";
     String user = "root";
     String password = "1234";
-    // LÍNEA 16 CORREGIDA: Apuntando a bd_ventas
     String url = "jdbc:mysql://localhost:3306/bd_ventas";
     
     Connection con;
@@ -23,7 +22,6 @@ public class ConexionMySql {
         try {
             Class.forName(driver);
             con = DriverManager.getConnection(url, user, password);
-            // Este mensaje te confirmará en consola que la conexión fue un éxito
             System.out.println("Conexión exitosa a bd_ventas"); 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error de conexión: " + e.getMessage());

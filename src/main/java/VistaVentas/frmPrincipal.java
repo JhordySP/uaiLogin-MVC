@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package VistaVentas;
+
 import ModeloVendedor.Vendedor;
 
 /**
@@ -34,7 +35,7 @@ public class frmPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         btnModuloVentas = new javax.swing.JButton();
-        btnVentas = new javax.swing.JButton();
+        btnClientes = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -46,10 +47,10 @@ public class frmPrincipal extends javax.swing.JFrame {
             }
         });
 
-        btnVentas.setText("Abrir Ventanas");
-        btnVentas.addActionListener(new java.awt.event.ActionListener() {
+        btnClientes.setText("Clientes");
+        btnClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVentasActionPerformed(evt);
+                btnClientesActionPerformed(evt);
             }
         });
 
@@ -67,8 +68,8 @@ public class frmPrincipal extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(btnModuloVentas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
-                .addComponent(btnVentas)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
+                .addComponent(btnClientes)
                 .addGap(33, 33, 33))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -81,7 +82,7 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addGap(49, 49, 49)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnModuloVentas)
-                    .addComponent(btnVentas))
+                    .addComponent(btnClientes))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
                 .addComponent(btnRegresar)
                 .addContainerGap())
@@ -95,14 +96,18 @@ public class frmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnModuloVentasActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
-       frmLogin login = new frmLogin();
-    login.setVisible(true);
-    this.dispose();
+        frmLogin login = new frmLogin();
+        login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnRegresarActionPerformed
 
-    private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
-        abrirModuloVentas();
-    }//GEN-LAST:event_btnVentasActionPerformed
+    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
+        VistaClientes.frmClientes ventanaClientes = new VistaClientes.frmClientes(this, true);
+
+        ventanaClientes.setLocationRelativeTo(this);
+
+        ventanaClientes.setVisible(true);
+    }//GEN-LAST:event_btnClientesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -146,8 +151,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         this.dispose(); // Cierra el menú principal
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnModuloVentas;
     private javax.swing.JButton btnRegresar;
-    private javax.swing.JButton btnVentas;
     // End of variables declaration//GEN-END:variables
 }
