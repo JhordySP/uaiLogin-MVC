@@ -15,6 +15,7 @@ import VistaClientes.frmProductos;
 public class frmVentas extends javax.swing.JFrame {
 
     private Vendedor vendedorActual;
+    private int idClienteActual = 0;
 
     public frmVentas(Vendedor v) {
         initComponents();
@@ -194,7 +195,7 @@ public class frmVentas extends javax.swing.JFrame {
                     int cantidadInput = Integer.parseInt(cantStr);
 
                     if (cantidadInput <= 0) {
-                        javax.swing.JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0, mano.");
+                        javax.swing.JOptionPane.showMessageDialog(this, "La cantidad debe ser mayor a 0.");
                         return;
                     }
 
@@ -294,6 +295,7 @@ public class frmVentas extends javax.swing.JFrame {
 
         if (elegido != null) {
             txtClienteSeleccionado.setText(elegido.getNombre());
+            this.idClienteActual = elegido.getId();
         }
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
@@ -313,7 +315,7 @@ public class frmVentas extends javax.swing.JFrame {
                 calcularTotalGeneral();
             }
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Mano, debes hacer clic sobre una fila de la tabla para poder eliminarla.");
+            javax.swing.JOptionPane.showMessageDialog(this, "debes hacer clic sobre una fila de la tabla para poder eliminarla.");
         }
     }//GEN-LAST:event_btnEliminarProductoActionPerformed
 
@@ -321,14 +323,13 @@ public class frmVentas extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) tblDetalleVenta.getModel();
 
         if (txtClienteSeleccionado.getText().trim().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Mano, debes asignar un cliente a la venta primero.");
+            javax.swing.JOptionPane.showMessageDialog(this, "debes asignar un cliente a la venta primero.");
             return;
         }
         if (modelo.getRowCount() == 0) {
             javax.swing.JOptionPane.showMessageDialog(this, "El carrito de compras está vacío, agrega algún producto.");
             return;
         }
-
         int confirmar = javax.swing.JOptionPane.showConfirmDialog(this,
                 "¿Deseas procesar y finalizar esta venta?",
                 "Confirmar Venta", javax.swing.JOptionPane.YES_NO_OPTION);
@@ -339,7 +340,7 @@ public class frmVentas extends javax.swing.JFrame {
 
         ModeloVentas.Venta nuevaVenta = new ModeloVentas.Venta();
 
-        nuevaVenta.setIdCliente(1);
+        nuevaVenta.setIdCliente(this.idClienteActual);
 
         nuevaVenta.setIdVendedor(this.vendedorActual.getId());
         nuevaVenta.setTotal(Double.parseDouble(lblTotal.getText()));
@@ -359,7 +360,7 @@ public class frmVentas extends javax.swing.JFrame {
         ControladorClientes.Control_Venta control = new ControladorClientes.Control_Venta();
 
         if (control.registrarVenta(nuevaVenta)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "¡Venta registrada con éxito en la base de datos, mano! El stock ha sido actualizado.");
+            javax.swing.JOptionPane.showMessageDialog(this, "¡Venta registrada con éxito en la base de datos! El stock ha sido actualizado.");
 
             modelo.setRowCount(0);
             txtClienteSeleccionado.setText("");

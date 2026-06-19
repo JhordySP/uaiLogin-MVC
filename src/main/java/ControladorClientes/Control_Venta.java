@@ -4,8 +4,13 @@
  */
 package ControladorClientes;
 
-import java.sql.*;
+import ControladorLogin.ConexionMySql;
 import ModeloVentas.Venta;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -14,89 +19,72 @@ import ModeloVentas.Venta;
 public class Control_Venta {
 
     public boolean registrarVenta(Venta venta) {
-        ControladorLogin.ConexionMySql mysql = new ControladorLogin.ConexionMySql();
+        boolean respuesta = false;
+        ConexionMySql mysql = new ConexionMySql();
         Connection cn = mysql.conectar();
-        PreparedStatement psVenta = null;
-        PreparedStatement psDetalle = null;
-        PreparedStatement psStock = null;
-        ResultSet rs = null;
 
         try {
-            cn.setAutoCommit(false);
+            cn.setAutoCommit(false); // Iniciamos la transacción segura
 
-            String sqlVenta = "INSERT INTO table_venta (idcliente, idvendedor, total_venta) VALUES (?, ?, ?)";
-            psVenta = cn.prepareStatement(sqlVenta, Statement.RETURN_GENERATED_KEYS);
-            psVenta.setInt(1, venta.getIdCliente());
-            psVenta.setInt(2, venta.getIdVendedor());
-            psVenta.setDouble(3, venta.getTotal());
-            psVenta.executeUpdate();
+            // 1. Insertar la cabecera de la venta en la tabla 'ventas'
+            String sqlVenta = "INSERT INTO ventas (id_cliente, id_usuario, total) VALUES (?, ?, ?)";
+            PreparedStatement pstVenta = cn.prepareStatement(sqlVenta, Statement.RETURN_GENERATED_KEYS);
+            pstVenta.setInt(1, venta.getIdCliente());
+            pstVenta.setInt(2, venta.getIdVendedor());
+            pstVenta.setDouble(3, venta.getTotal());
+            pstVenta.executeUpdate();
 
-            rs = psVenta.getGeneratedKeys();
-            int idVentaGenerado = 0;
+            // Capturamos el ID de la venta
+            ResultSet rs = pstVenta.getGeneratedKeys();
+            int idVentaGenerada = 0;
             if (rs.next()) {
-                idVentaGenerado = rs.getInt(1);
+                idVentaGenerada = rs.getInt(1);
             }
 
-            String sqlDetalle = "INSERT INTO table_detalle_venta (idventa, idproducto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
-            String sqlStock = "UPDATE table_producto SET stock_producto = stock_producto - ? WHERE idproducto = ?";
+            // 2. Preparamos las consultas para los detalles y para el descuento de stock
+            String sqlDetalle = "INSERT INTO detalle_ventas (id_venta, id_producto, cantidad, precio_unitario, subtotal) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement pstDetalle = cn.prepareStatement(sqlDetalle);
 
-            psDetalle = cn.prepareStatement(sqlDetalle);
-            psStock = cn.prepareStatement(sqlStock);
+            // LA MAGIA ESTÁ AQUÍ: Le decimos a MySQL que actualice restando la cantidad
+            String sqlStock = "UPDATE table_productos SET stock = stock - ? WHERE idProductos = ?";
+            PreparedStatement pstStock = cn.prepareStatement(sqlStock);
 
+            // 3. Recorremos el carrito
             for (Object[] fila : venta.getDetalles()) {
-                int idProd = Integer.parseInt(fila[0].toString());
-                double precio = Double.parseDouble(fila[2].toString());
-                int cant = Integer.parseInt(fila[3].toString());
-                double subtotal = Double.parseDouble(fila[4].toString());
+                // A. Guardamos el detalle en el voucher
+                pstDetalle.setInt(1, idVentaGenerada);
+                pstDetalle.setInt(2, Integer.parseInt(fila[0].toString())); // id_producto
+                pstDetalle.setInt(3, Integer.parseInt(fila[3].toString())); // cantidad
+                pstDetalle.setDouble(4, Double.parseDouble(fila[2].toString())); // precio
+                pstDetalle.setDouble(5, Double.parseDouble(fila[4].toString())); // subtotal
+                pstDetalle.executeUpdate();
 
-                psDetalle.setInt(1, idVentaGenerado);
-                psDetalle.setInt(2, idProd);
-                psDetalle.setInt(3, cant);
-                psDetalle.setDouble(4, precio);
-                psDetalle.setDouble(5, subtotal);
-                psDetalle.addBatch(); // Lo acumulamos en un lote
-
-                psStock.setInt(1, cant);
-                psStock.setInt(2, idProd);
-                psStock.addBatch(); // Lo acumulamos en un lote
+                // B. PASO CLAVE: RESTAR EL STOCK DEL INVENTARIO
+                pstStock.setInt(1, Integer.parseInt(fila[3].toString())); // Cantidad a restar
+                pstStock.setInt(2, Integer.parseInt(fila[0].toString())); // id_producto
+                pstStock.executeUpdate();
             }
 
-            psDetalle.executeBatch();
-            psStock.executeBatch();
-
+            // 4. Si todo salió perfecto, confirmamos la transacción
             cn.commit();
-            return true;
+            respuesta = true;
 
         } catch (SQLException e) {
-            System.out.println("Error al registrar venta: " + e.getMessage());
+            System.out.println("Error al registrar la venta: " + e.getMessage());
             try {
-                if (cn != null) {
-                    cn.rollback(); // Si algo falló, cancelamos la operación para no corromper la BD
-                }
+                cn.rollback();
             } catch (SQLException ex) {
-                System.out.println("Error en rollback: " + ex.getMessage());
+                System.out.println("Error en el rollback: " + ex.getMessage());
             }
-            return false;
         } finally {
             try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (psVenta != null) {
-                    psVenta.close();
-                }
-                if (psDetalle != null) {
-                    psDetalle.close();
-                }
-                if (psStock != null) {
-                    psStock.close();
-                }
-                if (cn != null) {
-                    cn.close();
-                }
+                cn.setAutoCommit(true);
+                cn.close();
             } catch (SQLException e) {
-                System.out.println("Error al cerrar conexiones: " + e.getMessage());
+                System.out.println("Error al cerrar conexión: " + e.getMessage());
             }
         }
+
+        return respuesta;
     }
 }

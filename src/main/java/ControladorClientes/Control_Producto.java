@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ControladorClientes;
+
 import ModeloClientes.Producto;
 import ControladorLogin.ConexionMySql;
 import java.sql.Connection;
@@ -11,19 +12,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  *
  * @author ASUS
  */
 public class Control_Producto {
+
     public List<Producto> obtenerListaProductos() {
         List<Producto> lista = new ArrayList<>();
-        String sql = "SELECT idproducto, nombre_producto, precio_producto, stock_producto FROM table_producto";        
-        ConexionMySql conexion = new ConexionMySql();        
-        try (Connection conn = conexion.conectar();
-             PreparedStatement pst = conn.prepareStatement(sql);
-             ResultSet rs = pst.executeQuery()) {
-            
+        String sql = "SELECT idproducto, nombre_producto, precio_producto, stock_producto FROM table_producto";
+        ConexionMySql conexion = new ConexionMySql();
+        try (Connection conn = conexion.conectar(); PreparedStatement pst = conn.prepareStatement(sql); ResultSet rs = pst.executeQuery()) {
+
             while (rs.next()) {
                 Producto p = new Producto();
                 p.setId(rs.getInt("idproducto"));
@@ -36,5 +37,18 @@ public class Control_Producto {
             e.printStackTrace();
         }
         return lista;
+    }
+
+    public boolean eliminarProducto(int id) {
+        String sql = "DELETE FROM table_productos WHERE idProductos = ?";
+        ControladorLogin.ConexionMySql mysql = new ControladorLogin.ConexionMySql();
+        try (java.sql.Connection conn = mysql.conectar(); java.sql.PreparedStatement pst = conn.prepareStatement(sql)) {
+            pst.setInt(1, id);
+            pst.execute();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error al eliminar producto: " + e.getMessage());
+            return false;
+        }
     }
 }

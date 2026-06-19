@@ -19,10 +19,28 @@ public class frmPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public frmPrincipal(Vendedor v) {
+    public frmPrincipal(Vendedor vendedorLogueado) {
         initComponents();
-        this.vendedorActual = v;
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null); // Para que aparezca centrado
+
+        // Guardamos los datos del usuario que entró
+        this.vendedorActual = vendedorLogueado;
+
+        // Llamamos a la seguridad
+        aplicarRestricciones();
+    }
+
+    private void aplicarRestricciones() {
+        // Validamos si el que entró eres tú o Claudio
+        if (vendedorActual.getRol().equalsIgnoreCase("Vendedor")) {
+
+            // Ocultamos los botones de mantenimiento para que no puedan crear ni editar
+            btnMantenimientoProductos.setVisible(false);
+            btnMantenimientoClientes.setVisible(false);
+            btnClientes.setVisible(false);
+
+        }
+
     }
 
     /**
@@ -37,6 +55,8 @@ public class frmPrincipal extends javax.swing.JFrame {
         btnModuloVentas = new javax.swing.JButton();
         btnClientes = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
+        btnMantenimientoProductos = new javax.swing.JButton();
+        btnMantenimientoClientes = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -61,20 +81,41 @@ public class frmPrincipal extends javax.swing.JFrame {
             }
         });
 
+        btnMantenimientoProductos.setText("Añadir/Ver Productos");
+        btnMantenimientoProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoProductosActionPerformed(evt);
+            }
+        });
+
+        btnMantenimientoClientes.setText("Añadir/Ver Clientes");
+        btnMantenimientoClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMantenimientoClientesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(btnModuloVentas)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
-                .addComponent(btnClientes)
-                .addGap(33, 33, 33))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnRegresar)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnMantenimientoProductos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnModuloVentas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnClientes)
+                        .addGap(75, 75, 75))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnMantenimientoClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(28, 28, 28))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -83,7 +124,11 @@ public class frmPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnModuloVentas)
                     .addComponent(btnClientes))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 199, Short.MAX_VALUE)
+                .addGap(47, 47, 47)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnMantenimientoProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnMantenimientoClientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
                 .addComponent(btnRegresar)
                 .addContainerGap())
         );
@@ -92,7 +137,9 @@ public class frmPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnModuloVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModuloVentasActionPerformed
-        abrirModuloVentas();
+        frmVentas ventanaVentas = new frmVentas(vendedorActual);
+        ventanaVentas.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_btnModuloVentasActionPerformed
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegresarActionPerformed
@@ -103,11 +150,21 @@ public class frmPrincipal extends javax.swing.JFrame {
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         VistaClientes.frmClientes ventanaClientes = new VistaClientes.frmClientes(this, true);
-
         ventanaClientes.setLocationRelativeTo(this);
-
         ventanaClientes.setVisible(true);
     }//GEN-LAST:event_btnClientesActionPerformed
+
+    private void btnMantenimientoProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoProductosActionPerformed
+        VistaProductos.frmMantenimientoProductos mantProd = new VistaProductos.frmMantenimientoProductos();
+        mantProd.setLocationRelativeTo(null);
+        mantProd.setVisible(true);
+    }//GEN-LAST:event_btnMantenimientoProductosActionPerformed
+
+    private void btnMantenimientoClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMantenimientoClientesActionPerformed
+        VistaClientes.frmMantenimientoClientes mantCli = new VistaClientes.frmMantenimientoClientes();
+        mantCli.setLocationRelativeTo(null);
+        mantCli.setVisible(true);
+    }//GEN-LAST:event_btnMantenimientoClientesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -152,6 +209,8 @@ public class frmPrincipal extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClientes;
+    private javax.swing.JButton btnMantenimientoClientes;
+    private javax.swing.JButton btnMantenimientoProductos;
     private javax.swing.JButton btnModuloVentas;
     private javax.swing.JButton btnRegresar;
     // End of variables declaration//GEN-END:variables

@@ -24,23 +24,37 @@ public class frmProductos extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         verProductos();
+        setLocationRelativeTo(null);
     }
 
     private void verProductos() {
         String[] columnas = {"ID", "Descripción", "Precio", "Stock"};
-        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
-        Control_Producto control = new Control_Producto();
-        List<Producto> lista = control.obtenerListaProductos();
+        javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(columnas, 0);
 
-        for (Producto p : lista) {
-            Object[] fila = {p.getId(), p.getNombre(), p.getPrecio(), p.getStock()};
-            modelo.addRow(fila);
+        ControladorProductos.Control_Producto control = new ControladorProductos.Control_Producto();
+        java.util.List<ModeloProductos.Producto> lista = control.obtenerListaProductos();
+
+        if(lista != null) {
+            for (ModeloProductos.Producto p : lista) {
+                // 2. Añade p.getStock() a la fila
+                Object[] fila = {
+                    p.getId(),
+                    p.getNombre(),
+                    p.getPrecio(),
+                    p.getStock()
+                };
+                modelo.addRow(fila);
+            }
         }
+
+        // Asignamos el modelo a la tabla (revisa que tu JTable se llame tblProductos)
         tblProductos.setModel(modelo);
     }
-public Producto getProductoSeleccionado() {
+
+    public Producto getProductoSeleccionado() {
         return productoSeleccionado;
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -129,21 +143,21 @@ public Producto getProductoSeleccionado() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-int fila = tblProductos.getSelectedRow();
+        int fila = tblProductos.getSelectedRow();
 
-if (fila >= 0) {
-    this.productoSeleccionado = new Producto();
-    
-    this.productoSeleccionado.setId(Integer.parseInt(tblProductos.getValueAt(fila, 0).toString()));
-    this.productoSeleccionado.setNombre(tblProductos.getValueAt(fila, 1).toString());
-    this.productoSeleccionado.setPrecio(Double.parseDouble(tblProductos.getValueAt(fila, 2).toString()));
-    this.productoSeleccionado.setStock(Integer.parseInt(tblProductos.getValueAt(fila, 3).toString()));
-    
-    this.dispose(); 
-    
-} else {
-    javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto de la tabla mano.");
-}
+        if (fila >= 0) {
+            this.productoSeleccionado = new Producto();
+
+            this.productoSeleccionado.setId(Integer.parseInt(tblProductos.getValueAt(fila, 0).toString()));
+            this.productoSeleccionado.setNombre(tblProductos.getValueAt(fila, 1).toString());
+            this.productoSeleccionado.setPrecio(Double.parseDouble(tblProductos.getValueAt(fila, 2).toString()));
+            this.productoSeleccionado.setStock(Integer.parseInt(tblProductos.getValueAt(fila, 3).toString()));
+
+            this.dispose();
+
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un producto de la tabla.");
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

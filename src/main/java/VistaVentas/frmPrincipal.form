@@ -24,16 +24,27 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
-              <Component id="btnModuloVentas" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="120" max="32767" attributes="0"/>
-              <Component id="btnClientes" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="btnRegresar" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Component id="btnMantenimientoProductos" max="32767" attributes="0"/>
+                  <Component id="btnModuloVentas" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace pref="44" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="btnClientes" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="75" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="btnMantenimientoClientes" min="-2" pref="153" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
           </Group>
       </Group>
     </DimensionLayout>
@@ -45,7 +56,12 @@
                   <Component id="btnModuloVentas" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnClientes" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="199" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnMantenimientoProductos" alignment="3" min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="btnMantenimientoClientes" alignment="0" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace pref="119" max="32767" attributes="0"/>
               <Component id="btnRegresar" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -75,6 +91,22 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRegresarActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnMantenimientoProductos">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="A&#xf1;adir/Ver Productos"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMantenimientoProductosActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnMantenimientoClientes">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="A&#xf1;adir/Ver Clientes"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnMantenimientoClientesActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

@@ -22,8 +22,9 @@ public class frmClientes extends javax.swing.JDialog {
      */
     public frmClientes(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-        initComponents();
-        verClientes();
+        initComponents();        
+        verClientes();         
+        setLocationRelativeTo(null);
     }
 
     public ModeloClientes.Cliente getClienteSeleccionado() {
@@ -31,22 +32,26 @@ public class frmClientes extends javax.swing.JDialog {
     }
 
     private void verClientes() {
-        String[] columnas = {"ID", "Nombre", "Apellido"};
-        DefaultTableModel modelo = new DefaultTableModel(columnas, 0);
-
-        Control_Cliente control = new Control_Cliente();
-        List<Cliente> clientes = control.obtenerListaClientes();
-
-        for (Cliente c : clientes) {
-            Object[] fila = {
-                c.getId(),
-                c.getNombre(),
-                c.getApellido()
-            };
-            modelo.addRow(fila);
+       String[] columnas = {"ID", "Nombre", "Apellido"};
+        javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(columnas, 0);
+        
+        ControladorClientes.Control_Cliente control = new ControladorClientes.Control_Cliente();
+        java.util.List<ModeloClientes.Cliente> lista = control.obtenerListaClientes();
+        
+        // Evitamos el error NullPointerException si la lista viene vacía
+        if (lista != null) {
+            for (ModeloClientes.Cliente c : lista) {
+                Object[] fila = {
+                    c.getId(),
+                    c.getNombre(),
+                    c.getApellido()
+                };
+                modelo.addRow(fila);
+            }
         }
-        tblClientes.setModel(modelo);
-
+        
+        // Asegúrate de que tu tabla en el diseño se llame exactamente tblClientes
+        tblClientes.setModel(modelo); 
     }
 
     /**
@@ -164,7 +169,7 @@ public class frmClientes extends javax.swing.JDialog {
             this.dispose();
 
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un cliente de la tabla mano.");
+            javax.swing.JOptionPane.showMessageDialog(this, "Por favor, seleccione un cliente de la tabla.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
